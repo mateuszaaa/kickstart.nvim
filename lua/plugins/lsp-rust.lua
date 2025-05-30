@@ -32,7 +32,8 @@ return {
         default_settings = {
           -- rust-analyzer language server configuration
           ['rust-analyzer'] = {
-            checkOnSave = false,
+            inlayHints = true,
+            checkOnSave = true,
             cargo = {
               allFeatures = false,
               loadOutDirsFromCheck = true,

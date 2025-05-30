@@ -24,12 +24,13 @@ return { -- Autoformat
       else
         return {
           timeout_ms = 500,
-          lsp_format = 'fallback',
+          lsp_format = 'never',
         }
       end
     end,
     formatters_by_ft = {
       lua = { 'stylua' },
+      solidity = { 'forge_fmt' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       --

@@ -21,7 +21,29 @@ return {
       callback = function(event)
         -- NOTE: Remember that Lua is a real programming language, and as such it is possible
         -- to define small helper and utility functions so you don't have to repeat yourself.
-        --
+        vim.diagnostic.config {
+          signs = true,
+          underline = false,
+          update_in_insert = false,
+          severity_sort = true,
+          virtual_lines = { current_line = true, severity = { min = 'ERROR' } },
+          virtual_text = {
+            prefix = '●', -- or '■', '▶', etc.
+            spacing = 2,
+            current_line = false,
+            severity = { min = 'ERROR' },
+          },
+        }
+
+        if vim.lsp.inlay_hint then
+          vim.lsp.inlay_hint.enable(true)
+        end
+
+        local signs = { Error = '', Warn = '', Hint = '', Info = '' }
+        for type, icon in pairs(signs) do
+          local hl = 'DiagnosticSign' .. type
+          vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+        end
 
         local opts = { noremap = true, silent = true, buffer = event.buf }
         vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
@@ -33,6 +55,7 @@ return {
         vim.keymap.set('n', '<leader>cq', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
         vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename, opts)
         vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+        vim.keymap.set('n', '<leader>cd', vim.diagnostic.open_float, { desc = 'Show diagnostic in float' })
 
         vim.keymap.set('n', '<leader>cf', function()
           vim.lsp.buf.format { async = true }
