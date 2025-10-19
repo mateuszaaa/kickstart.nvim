@@ -5,25 +5,35 @@ return {
     require('codecompanion').setup {
       strategies = {
         chat = {
-          adapter = 'openai',
+          adapter = 'ollama',
         },
         inline = {
-          adapter = 'openai',
+          adapter = 'ollama',
         },
-        cmd = {
-          adapter = 'openai',
+        agent = {
+          adapter = 'ollama',
         },
       },
       adapters = {
-        openai = function()
-          return require('codecompanion.adapters').extend('openai', {
-            schema = {
-              model = {
-                default = 'gpt-4o',
+        -- acp = {
+        --   claude_code = function()
+        --     return require('codecompanion.adapters').extend('claude_code', {
+        --       env = {
+        --         CLAUDE_CODE_OAUTH_TOKEN = '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',
+        --       },
+        --     })
+        --   end,
+        -- },
+        http = {
+          ollama = function()
+            return require('codecompanion.adapters').extend('openai_compatible', {
+              env = {
+                url = 'http://localhost:1234',
+                api_key = 'lm-studio',
               },
-            },
-          })
-        end,
+            })
+          end,
+        },
       },
     }
   end,

@@ -20,6 +20,8 @@ vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 vim.o.splitright = true
 vim.o.splitbelow = true
+vim.o.exrc = true
+vim.o.secure = true
 
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }

@@ -1,5 +1,6 @@
 return {
   'mrcjkb/rustaceanvim',
+  enabled = true,
   version = '^6', -- Recommended
   lazy = false, -- This plugin is already lazy
   keys = {
@@ -35,12 +36,14 @@ return {
             inlayHints = true,
             checkOnSave = true,
             cargo = {
+              allTargets = false,
               allFeatures = false,
               loadOutDirsFromCheck = true,
               runBuildScripts = false,
             },
             check = {
               command = 'check',
+              -- extraArgs = { '--all-targets', '--workspace' },
             },
             -- Add clippy lints for Rust.
             procMacro = {
