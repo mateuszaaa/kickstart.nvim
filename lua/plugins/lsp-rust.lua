@@ -18,6 +18,7 @@ return {
       tools = {},
       -- LSP configuration
       server = {
+        logfile = '/tmp/rust-analyzer.log',
         on_attach = function(client, bufnr)
           vim.keymap.set(
             'n',

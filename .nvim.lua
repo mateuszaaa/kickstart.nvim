@@ -84,7 +84,7 @@ local function setup_rust_analyzer_on_attach()
 				POA_TOKEN_WASM_NO_REGISTRATION_WASM = "/Users/mat/intents/res/poa-token-no-registration/defuse_poa_token.wasm",
 			},
 			extraArgs = {
-				"--workspacexxx",
+				-- "--workspace",
 			},
 			allTargets = true,
 		},
