@@ -39,88 +39,23 @@ local function configure_rust_analyzer(config, description)
 	end, 100)
 end
 
--- -- Custom RustAnalyzer command for advanced features with WASM target
--- vim.api.nvim_create_user_command("CustomCommandRAFeatureAdvanced", function()
--- 	configure_rust_analyzer({
--- 		runnables = {
--- 			extraArgs = {
--- 				"--workspace",
--- 			},
--- 		},
--- 		cargo = {
--- 			extraEnv = {
--- 				POA_TOKEN_WASM = "/Users/mat/intents/res/defuse_poa_token.wasm",
--- 				POA_TOKEN_WITH_NO_REGISTRATION_DIR = "/Users/mat/intents/res/poa-token-no-registration",
--- 				POA_TOKEN_WASM_NO_REGISTRATION_WASM = "/Users/mat/intents/res/poa-token-no-registration/defuse_poa_token.wasm",
--- 			},
--- 			extraArgs = {
--- 				"--workspacexxx",
--- 			},
--- 			allTargets = true,
--- 		},
--- 		check = {
--- 			workspace = true,
--- 			-- extraEnv = {
--- 			-- 	POA_TOKEN_WASM = "/Users/mat/intents/res/defuse_poa_token.wasm",
--- 			-- 	POA_TOKEN_WITH_NO_REGISTRATION_DIR = "/Users/mat/intents/res/poa-token-no-registration",
--- 			-- 	POA_TOKEN_WASM_NO_REGISTRATION_WASM = "/Users/mat/intents/res/poa-token-no-registration/defuse_poa_token.wasm",
--- 			-- },
--- 		},
--- 	}, "advanced features, allTargets, and WASM target")
--- end, { desc = "Configure RustAnalyzer with advanced features, allTargets, and WASM target" })
-
--- Configure RustAnalyzer after LSP is attached
-local function setup_rust_analyzer_on_attach()
+-- Custom RustAnalyzer command for advanced features with WASM target
+vim.api.nvim_create_user_command("CustomCommandRAFeatureAdvanced", function()
 	configure_rust_analyzer({
-		runnables = {
-			extraArgs = {
-				"--workspace",
-			},
-		},
 		cargo = {
-			extraEnv = {
-				POA_TOKEN_WASM = "/Users/mat/intents/res/defuse_poa_token.wasm",
-				POA_TOKEN_WITH_NO_REGISTRATION_DIR = "/Users/mat/intents/res/poa-token-no-registration",
-				POA_TOKEN_WASM_NO_REGISTRATION_WASM = "/Users/mat/intents/res/poa-token-no-registration/defuse_poa_token.wasm",
-			},
-			extraArgs = {
-				-- "--workspace",
-			},
-			allTargets = true,
-		},
-		check = {
-			workspace = true,
-			-- extraEnv = {
-			-- 	POA_TOKEN_WASM = "/Users/mat/intents/res/defuse_poa_token.wasm",
-			-- 	POA_TOKEN_WITH_NO_REGISTRATION_DIR = "/Users/mat/intents/res/poa-token-no-registration",
-			-- 	POA_TOKEN_WASM_NO_REGISTRATION_WASM = "/Users/mat/intents/res/poa-token-no-registration/defuse_poa_token.wasm",
-			-- },
+			features = { "advanced" },
 		},
 	}, "advanced features, allTargets, and WASM target")
-end
+end, { desc = "Configure RustAnalyzer with advanced features, allTargets, and WASM target" })
 
--- Hook into LSP attach event to configure after initialization
-local group = vim.api.nvim_create_augroup("RustAnalyzerConfig", { clear = true })
-vim.api.nvim_create_autocmd("LspAttach", {
-	group = group,
-	callback = function(args)
-		local client = vim.lsp.get_client_by_id(args.data.client_id)
-		if client and client.name == "rust-analyzer" then
-			setup_rust_analyzer_on_attach()
-			-- Remove autocmd after first successful attach to avoid reconfiguring
-			vim.api.nvim_del_augroup_by_id(group)
-		end
-	end,
-})
-
--- -- Custom RustAnalyzer command for WASM features
--- vim.api.nvim_create_user_command("CustomCommandRAFeatureWasm", function()
--- 	configure_rust_analyzer({
--- 		cargo = {
--- 			features = { "wasm-support" },
--- 		},
--- 	}, "wasm-support features, allTargets, and WASM target")
--- end, { desc = "Configure RustAnalyzer with wasm-support features, allTargets, and WASM target" })
+-- Custom RustAnalyzer command for WASM features
+vim.api.nvim_create_user_command("CustomCommandRAFeatureWasm", function()
+	configure_rust_analyzer({
+		cargo = {
+			features = { "wasm-support" },
+		},
+	}, "wasm-support features, allTargets, and WASM target")
+end, { desc = "Configure RustAnalyzer with wasm-support features, allTargets, and WASM target" })
 
 -- Command to pick and execute custom commands using snacks picker
 vim.api.nvim_create_user_command("CustomCommandPicker", function()

@@ -44,7 +44,7 @@ return {
             },
             check = {
               command = 'check',
-              -- extraArgs = { '--all-targets', '--workspace' },
+              workspace = true,
             },
             -- Add clippy lints for Rust.
             procMacro = {
