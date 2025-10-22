@@ -11,6 +11,7 @@ return {
     { '<leader>rr', '<cmd>RustLsp runnables<cr>', desc = 'Rust runables' },
     { '<leader>rt', '<cmd>RustLsp testables<cr>', desc = 'Rust tests' },
     { '<leader>rd', '<cmd>RustLsp debuggables<cr>', desc = 'Rust debuggables' },
+    { '<leader>ro', '<cmd>RustLsp openCargo<cr>', desc = 'Open cargo' },
   },
   config = function()
     vim.g.rustaceanvim = {
@@ -58,8 +59,6 @@ return {
           },
         },
       },
-      -- DAP configuration
-      dap = {},
     }
   end,
 }
