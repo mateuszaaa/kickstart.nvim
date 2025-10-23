@@ -35,6 +35,9 @@ return {
         default_settings = {
           -- rust-analyzer language server configuration
           ['rust-analyzer'] = {
+            trace = {
+              server = 'verbose',
+            },
             inlayHints = true,
             checkOnSave = true,
             cargo = {
