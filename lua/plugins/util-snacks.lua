@@ -14,8 +14,8 @@ return {
       remote_patterns = {
         { '^defuse.*github.com:(.*).git', 'https://github.com/%1' },
         { '^(https?://.*)%.git$', '%1' },
-        { '^https://defuse-github.com:(.+).git$', 'https://example.com/%1' },
-        { '^git@(.+):(.+)%.git$', 'https://%1/%2/foo' },
+        { '^git@(.+):(.+)%.git$', 'https://%1/%2' },
+        { '^git@defuse.*github.com:(.+)%.git$', 'https://github.com/%2' },
         { '^git@(.+):(.+)$', 'https://%1/%2' },
         { '^git@(.+)/(.+)$', 'https://%1/%2' },
         { '^org%-%d+@(.+):(.+)%.git$', 'https://%1/%2' },
