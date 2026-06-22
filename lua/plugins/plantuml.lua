@@ -5,6 +5,7 @@ return {
   dependencies = { 'javiorfo/nvim-nyctophilia' },
 
   lazy = true,
+  enabled = false,
   ft = 'plantuml',
   config = function()
     require('soil').setup {

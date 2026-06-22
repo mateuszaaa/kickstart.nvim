@@ -22,6 +22,7 @@ vim.o.splitright = true
 vim.o.splitbelow = true
 vim.o.exrc = true
 vim.o.secure = true
+vim.o.completeopt = 'menu,menuone,noinsert'
 
 vim.o.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
@@ -30,6 +31,16 @@ vim.o.swapfile = false
 vim.o.inccommand = 'split'
 vim.o.cursorline = true
 vim.o.scrolloff = 10
+
+vim.opt.diffopt = {
+  'internal',
+  'filler',
+  'closeoff',
+  'vertical',
+  'algorithm:histogram',
+  'indent-heuristic',
+  'linematch:60',
+}
 
 -- [[ Basic Keymaps ]]
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -49,6 +60,7 @@ vim.keymap.set({ 'n', 'x' }, 'gP', '<Plug>(YankyGPutBefore)')
 vim.keymap.set('n', '<c-p>', '<Plug>(YankyPreviousEntry)')
 vim.keymap.set('n', '<c-n>', '<Plug>(YankyNextEntry)')
 
+vim.keymap.set({ 'n', 'v' }, '<C-q>', '<C-y>', { desc = 'Scroll up one line' })
 vim.keymap.set('n', 'q', '<Nop>', { desc = 'Disabled' })
 vim.keymap.set('n', 'Q', 'q', { desc = 'Record macro' })
 

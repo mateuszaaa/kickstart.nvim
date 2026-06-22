@@ -29,7 +29,19 @@ return {
         { '%.git$', '' },
       },
     },
-    picker = { enabled = true },
+    picker = {
+      enabled = true,
+      previewers = {
+        git = {
+          builtin = false,
+          cmd = {
+            'difftool',
+            '--tool=difftastic',
+          },
+        },
+      },
+    },
+    gh = { enabled = true },
     notifier = { enabled = false },
     quickfile = { enabled = true },
     scope = { enabled = false },
