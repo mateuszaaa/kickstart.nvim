@@ -132,6 +132,7 @@ return {
     local servers = {
       -- rust-analyzer is autoconfigured by rustceans.nvim plugin
       -- rust_analyzer = {},
+      ts_ls = {},
       lua_ls = {
         -- cmd = { ... },
         -- filetypes = { ... },
