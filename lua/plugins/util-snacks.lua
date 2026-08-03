@@ -1,3 +1,42 @@
+-- ghlite publishes PR review comments as diagnostics in these namespaces.
+-- nvim_create_namespace is idempotent and keyed by name, so asking for the id
+-- here returns the same one ghlite gets later.
+local GHLITE_NS = {}
+for _, name in ipairs { 'GHLiteNamespace', 'GHLiteDiffNamespace' } do
+  GHLITE_NS[vim.api.nvim_create_namespace(name)] = true
+end
+
+-- Review comments are prose and the default previewer shows the file, which is
+-- unreadable for a discussion. Render those as markdown with a little code
+-- context; leave every other diagnostic on the normal file preview.
+---@param ctx snacks.picker.preview.ctx
+local function diagnostic_preview(ctx)
+  local d = ctx.item.item
+  ctx.preview:reset()
+  if not d or not GHLITE_NS[d.namespace] then
+    return Snacks.picker.preview.file(ctx)
+  end
+
+  local sev = vim.diagnostic.severity[d.severity] or '?'
+  local lines = { ('# %s%s'):format(sev, d.source and ('  ·  ' .. d.source) or ''), '' }
+  vim.list_extend(lines, vim.split(d.message, '\n', { plain = true }))
+
+  local file = ctx.item.file
+  if file and vim.fn.filereadable(file) == 1 then
+    local all = vim.fn.readfile(file)
+    local lnum = (d.lnum or 0) + 1
+    local from, to = math.max(1, lnum - 3), math.min(#all, lnum + 3)
+    vim.list_extend(lines, { '', '---', '', ('```%s'):format(vim.filetype.match { filename = file } or '') })
+    for i = from, to do
+      table.insert(lines, all[i])
+    end
+    table.insert(lines, '```')
+  end
+
+  ctx.preview:set_lines(lines)
+  ctx.preview:highlight { ft = 'markdown' }
+end
+
 return {
   'folke/snacks.nvim',
   priority = 1000,
@@ -39,6 +78,10 @@ return {
             '--tool=difftastic',
           },
         },
+      },
+      sources = {
+        diagnostics = { preview = diagnostic_preview },
+        diagnostics_buffer = { preview = diagnostic_preview },
       },
     },
     gh = { enabled = true },
