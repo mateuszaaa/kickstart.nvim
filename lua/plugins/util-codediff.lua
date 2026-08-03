@@ -1,6 +1,53 @@
+-- codediff only cleans up a session when a closed window matches its tracked
+-- diff panes and the remaining window count drops below a threshold. Closing a
+-- pane can therefore leave a stale session behind, and :CodeDiff then toggles
+-- that leftover closed instead of opening a new diff. Sweep any session whose
+-- diff pair is no longer intact.
+vim.api.nvim_create_autocmd({ 'WinClosed', 'BufEnter', 'TabClosed' }, {
+  callback = function()
+    vim.schedule(function()
+      local ok, lifecycle = pcall(require, 'codediff.ui.lifecycle')
+      if not ok then
+        return
+      end
+      local session = require 'codediff.ui.lifecycle.session'
+      for tabpage, diff in pairs(session.get_active_diffs()) do
+        if not vim.api.nvim_tabpage_is_valid(tabpage) then
+          lifecycle.cleanup(tabpage)
+        else
+          local orig_ok = diff.original_win and vim.api.nvim_win_is_valid(diff.original_win) or false
+          local mod_ok = diff.modified_win and vim.api.nvim_win_is_valid(diff.modified_win) or false
+          if (diff.original_win or diff.modified_win) and (not orig_ok or not mod_ok) then
+            lifecycle.cleanup(tabpage)
+          end
+        end
+      end
+    end)
+  end,
+})
+
 return {
   'esmuellert/codediff.nvim',
   cmd = 'CodeDiff',
+  keys = {
+    {
+      '<leader>d',
+      function()
+        require('util-branch-picker').pick(function(branch)
+          -- :CodeDiff toggles: with a (possibly stale) session left in the
+          -- current tab it would close that instead of opening a new diff.
+          -- Force-close any session here so the pick always opens fresh.
+          local lifecycle = require 'codediff.ui.lifecycle'
+          local tabpage = vim.api.nvim_get_current_tabpage()
+          if lifecycle.get_session(tabpage) then
+            lifecycle.close(tabpage)
+          end
+          vim.cmd('CodeDiff ' .. branch)
+        end)
+      end,
+      desc = 'diff against branch (CodeDiff)',
+    },
+  },
   opts = {
     -- Highlight configuration
     highlights = {
